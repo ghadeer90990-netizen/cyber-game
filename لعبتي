@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>لعبة أنا واعية - الوعي الرقمي</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800;900&display=swap');
+
+*{box-sizing:border-box}
+
+body{
+ margin:0;
+ padding:18px;
+ min-height:100vh;
+ font-family:'Tajawal',Tahoma,sans-serif;
+ background:linear-gradient(135deg,#e6f7ff,#f4efff);
+ color:#20324c;
+ display:grid;
+ place-items:center;
+}
+
+.shell{
+ width:min(920px,100%);
+ background:white;
+ border:3px solid white;
+ border-radius:28px;
+ box-shadow:0 20px 60px #294c7624;
+ overflow:hidden;
+}
+
+header{
+ background:linear-gradient(110deg,#004d25,#006C35);
+ color:white;
+ padding:20px;
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ gap:12px;
+}
+
+.brand{display:flex;align-items:center;gap:15px}
+
+/* علم السعودية المتحرك بجانب النص */
+.animated-flag {
+ width: 65px;
+ height: 45px;
+ background: #006C35;
+ border: 2px solid #ffd700;
+ border-radius: 6px;
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+ justify-content: center;
+ box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+ animation: pulseFlag 2s infinite ease-in-out;
+ padding: 2px;
+}
+
+@keyframes pulseFlag {
+ 0% { transform: scale(1); }
+ 50% { transform: scale(1.05); }
+ 100% { transform: scale(1); }
+}
+
+.country-title {
+ font-size: 1.1rem;
+ font-weight: 900;
+ color: #ffffff;
+ margin: 0;
+ text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+h1{font-size:clamp(20px,3.5vw,28px);margin:0}
+.subtitle{color:#d9efff;margin:3px 0 0;font-size:0.9rem;}
+
+button{font-family:inherit;cursor:pointer}
+
+.sound{
+ background:#ffffff20;
+ border:1px solid #ffffff77;
+ color:white;
+ padding:10px;
+ border-radius:12px;
+}
+
+main{padding:25px}
+
+.welcome{text-align:center;padding:20px 8px}
+.hero{font-size:75px}
+.welcome h2{font-size:29px;color:#17345c}
+.welcome p{font-size:18px;line-height:1.9;color:#52657c}
+
+.btn{
+ border:0;
+ border-radius:15px;
+ padding:14px 28px;
+ background:linear-gradient(120deg,#ff78a8,#f05d91);
+ color:white;
+ font-size:19px;
+ font-weight:900;
+ box-shadow:0 6px 0 #c94376;
+}
+
+.btn:active{transform:translateY(3px)}
+
+.hidden{display:none!important}
+
+.topline{
+ display:flex;
+ justify-content:space-between;
+ gap:10px;
+ margin-bottom:15px;
+}
+
+.pill{
+ background:#edf5ff;
+ color:#285b91;
+ border-radius:30px;
+ padding:9px 15px;
+ font-weight:800;
+}
+
+.progress{
+ height:12px;
+ background:#e9eff6;
+ border-radius:20px;
+ overflow:hidden;
+ margin-bottom:22px;
+}
+
+.bar{
+ height:100%;
+ width:0;
+ background:linear-gradient(90deg,#54c7bd,#78a8f4);
+ transition:.3s;
+}
+
+.question-card{
+ background:linear-gradient(140deg,#f5fbff,#fff8fc);
+ border:2px solid #e2eff9;
+ border-radius:22px;
+ padding:22px;
+ text-align:center;
+}
+
+.scenario{font-size:55px}
+
+.qtext{
+ font-size:25px;
+ font-weight:900;
+ line-height:1.7;
+ color:#1e3e67;
+}
+
+.answers{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:12px;
+}
+
+.answer{
+ background:white;
+ border:2px solid #dce8f3;
+ border-radius:15px;
+ padding:16px;
+ min-height:65px;
+ font-size:17px;
+ font-weight:700;
+ color:#25415f;
+ text-align:right;
+}
+
+.answer:disabled{cursor:default}
+.answer.correct{background:#e8fbf3;border-color:#2db58b;color:#087b59}
+.answer.wrong{background:#fff0f1;border-color:#ef7a82;color:#b83c4b}
+
+.feedback{
+ display:none;
+ margin-top:18px;
+ padding:15px;
+ border-radius:15px;
+ text-align:right;
+ line-height:1.9;
+ font-weight:700;
+}
+
+.feedback.good{
+ display:block;
+ background:#e8fbf3;
+ color:#087b59;
+}
+
+.feedback.bad{
+ display:block;
+ background:#fff0f1;
+ color:#a93645;
+}
+
+.nextrow{margin-top:20px}
+
+.result{text-align:center;padding:20px}
+.medal{font-size:85px}
+.result h2{color:#17345c;font-size:30px}
+.score{font-size:25px;color:#159b72;font-weight:900}
+.stars{font-size:30px;margin:15px}
+
+.school-credit{
+ margin-top:25px;
+ padding:20px 10px;
+ border-top:2px solid #e2eff9;
+ text-align:center;
+ line-height:2;
+ color:#315273;
+ font-weight:800;
+}
+
+@media(max-width:600px){
+ .answers{grid-template-columns:1fr}
+ header{padding:14px}
+ .qtext{font-size:21px}
+ main{padding:16px}
+}
+</style>
+</head>
+
+<body>
+<div class="shell">
+
+<header>
+ <div class="brand" style="display:flex; align-items:center; gap:12px;">
+  <!-- علم السعودية المتحرك الحقيقي -->
+  <div class="animated-flag" title="علم المملكة العربية السعودية">
+   <div style="width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center;">
+    <span style="font-size:6.5px; font-weight:900; color:#ffffff; line-height:1; direction:rtl;">لا إله إلا الله</span>
+    <span style="font-size:5.5px; font-weight:700; color:#ffffff; line-height:1; margin-top:1px;">محمد رسول الله</span>
+    <div style="width:25px; height:1.5px; background:white; margin-top:2px; transform:rotate(-8deg);"></div>
+   </div>
+  </div>
+  <div>
+   <div class="country-title">المملكة العربية السعودية</div>
+   <h1>لعبة أنا واعية</h1>
+   <p class="subtitle">بطلات العالم الرقمي الآمن ✨</p>
+  </div>
+ </div>
+ <button class="sound" id="soundToggle">🔊 الصوت يعمل</button>
+</header>
+
+<main>
+
+<section id="welcome" class="welcome">
+ <div class="hero">👩🏻‍💻🌟</div>
+ <h2>هل أنتِ مستعدة لتصبحي بطلة رقمية؟</h2>
+ <p>
+ انطلقي في مغامرة ممتعة، وأجيبي عن المواقف الذكية
+ لتتعلمي كيف تحمين نفسك ومعلوماتك أثناء استخدام
+ الأجهزة والإنترنت.
+ </p>
+ <button class="btn" id="startBtn">ابدئي المغامرة 🚀</button>
+ <p>١٠ تحديات قصيرة • أصوات تفاعلية • تغذية راجعة فورية</p>
+</section>
+
+<section id="game" class="hidden">
+
+ <div class="topline">
+  <span class="pill" id="qCount"></span>
+  <span class="pill" id="score">⭐ النقاط: ٠</span>
+ </div>
+
+ <div class="progress">
+  <div class="bar" id="bar"></div>
+ </div>
+
+ <div class="question-card">
+  <div class="scenario" id="emoji"></div>
+  <p class="qtext" id="question"></p>
+
+  <div class="answers" id="answers"></div>
+
+  <div class="feedback" id="feedback"></div>
+
+  <div class="nextrow">
+   <button class="btn hidden" id="nextBtn">السؤال التالي ←</button>
+  </div>
+ </div>
+</section>
+
+<section id="result" class="result hidden">
+ <div class="medal" id="medal">🏆</div>
+ <h2 id="resultTitle">أحسنتِ يا بطلة!</h2>
+ <div class="score" id="finalScore"></div>
+ <div class="stars" id="finalStars">⭐⭐⭐⭐⭐</div>
+ <p id="resultText"></p>
+ <button class="btn" id="restartBtn">أعيدي المغامرة 🔄</button>
+</section>
+
+<div class="school-credit">
+ <div>إعداد المعلمة: غدير البحيري</div>
+ <div>الابتدائية التاسعة</div>
+ <div>مديرة المدرسة: سارة الحوشان</div>
+</div>
+</main>
+</div>
+
+<script>
+const questions=[
+{
+e:"🎁",
+q:"ظهرت لكِ رسالة من شخص مجهول تقول: اضغطي هنا لتحصلي على هدية مجانية! ماذا تفعلين؟",
+a:["أضغط بسرعة لأحصل على الهدية","لا أضغط وأخبر شخصًا بالغًا أثق به","أرسل الرابط لصديقاتي"],
+c:1,
+why:"رائعة! الروابط المجهولة قد تقود إلى مواقع ضارة أو تحاول سرقة معلوماتك. لا تفتحيها وأخبري شخصًا بالغًا."
+},
+{
+e:"🔐",
+q:"طلبت منك لعبة إلكترونية كلمة المرور الخاصة بحسابك. ما التصرف الصحيح؟",
+a:["أعطيها كلمة المرور","أكتب كلمة مرور سهلة","لا أشارك كلمة المرور مع أحد"],
+c:2,
+why:"إجابة صحيحة! كلمة المرور سر خاص، ولا تشاركينها مع الآخرين."
+},
+{
+e:"📸",
+q:"طلبت منك صديقة عبر الإنترنت إرسال صورة لكِ مع اسم مدرستك. ماذا تفعلين؟",
+a:["أرسل الصورة فورًا","لا أرسل معلوماتي أو صوري وأستشير أسرتي","أنشرها للجميع"],
+c:1,
+why:"أحسنتِ! الصور واسم المدرسة معلومات خاصة. لا تشاركيها دون موافقة ولي أمرك."
+},
+{
+e:"🤝",
+q:"أرسل لكِ شخص لا تعرفينه طلب صداقة. ماذا تفعلين؟",
+a:["أقبله فورًا","أخبره بعنوان منزلي","لا أقبل الطلب وأخبر شخصًا بالغًا"],
+c:2,
+why:"ممتازة! ليس كل من نتعرف إليه عبر الإنترنت شخصًا موثوقًا."
+},
+{
+e:"💬",
+q:"كتبت زميلة تعليقًا مزعجًا على الإنترنت. كيف تتصرفين؟",
+a:["أرد عليها بإهانة","أحافظ على هدوئي وأطلب المساعدة","أنشر التعليق للجميع"],
+c:1,
+why:"تصرف واعٍ! الكلمات الطيبة مهمة في العالم الرقمي أيضًا."
+},
+{
+e:"🌐",
+q:"تريدين البحث عن معلومة لواجبك المدرسي. أي المواقع تختارين؟",
+a:["موقعًا تعليميًا موثوقًا بإشراف معلمتي","أي رابط يظهر أمامي","موقعًا يطلب بياناتي الشخصية"],
+c:0,
+why:"أحسنتِ! اختاري المواقع التعليمية المعروفة والموثوقة."
+},
+{
+e:"⏰",
+q:"أمضيتِ وقتًا طويلًا أمام الجهاز وتشعرين بالتعب. ما الأفضل؟",
+a:["أواصل اللعب لساعات","آخذ استراحة وأريح عينيّ","أقترب أكثر من الشاشة"],
+c:1,
+why:"صحيح! خذي فترات راحة منتظمة وابتعدي عن الشاشة لبعض الوقت."
+},
+{
+e:"📰",
+q:"وصلتك معلومة غريبة ومثيرة، ولا تعرفين مصدرها. ماذا تفعلين؟",
+a:["أنشرها فورًا","أتحقق من مصدر موثوق وأسأل معلمتي أو أسرتي","أضيف معلومات من عندي"],
+c:1,
+why:"تفكير ناقد! تحققي من صحة الأخبار ومصدرها قبل نشرها."
+},
+{
+e:"🛍️",
+q:"ظهرت نافذة تطلب رقم هاتفك وعنوان منزلك للفوز بجائزة. ماذا تفعلين؟",
+a:["أكتب البيانات","أغلق النافذة وأخبر شخصًا بالغًا","أكتب بيانات صديقتي"],
+c:1,
+why:"ممتازة! لا تدخلي بياناتك الشخصية في المواقع غير الموثوقة."
+},
+{
+e:"💻",
+q:"ما العبارة التي تمثل سلوك البطلة الرقمية؟",
+a:["أفكر قبل أن أنقر وأحمي خصوصيتي","أثق بكل ما أراه","أشارك كلمة مروري مع صديقاتي"],
+c:0,
+why:"رائعة! البطلة الرقمية تفكر قبل النقر وتحمي معلوماتها."
+}
+];
+
+let index=0;
+let points=0;
+let locked=false;
+let soundOn=true;
+let audioCtx;
+
+const $=id=>document.getElementById(id);
+
+function playTone(type){
+ if(!soundOn)return;
+
+ try{
+  audioCtx=audioCtx||new(window.AudioContext||window.webkitAudioContext)();
+  if(audioCtx.state==="suspended")audioCtx.resume();
+
+  const now=audioCtx.currentTime;
+  const notes=type==="good"?[660,880,1100]:[240,185];
+
+  notes.forEach((freq,i)=>{
+   const o=audioCtx.createOscillator();
+   const g=audioCtx.createGain();
+
+   o.type=type==="good"?"sine":"triangle";
+   o.frequency.value=freq;
+
+   g.gain.setValueAtTime(.0001,now+i*.13);
+   g.gain.exponentialRampToValueAtTime(.16,now+i*.13+.02);
+   g.gain.exponentialRampToValueAtTime(.0001,now+i*.13+.22);
+
+   o.connect(g);
+   g.connect(audioCtx.destination);
+
+   o.start(now+i*.13);
+   o.stop(now+i*.13+.24);
+  });
+ }catch(e){}
+}
+
+function showQuestion(){
+ locked=false;
+
+ const item=questions[index];
+
+ $("qCount").textContent=`السؤال ${index+1} من ${questions.length}`;
+ $("score").textContent=`⭐ النقاط: ${points}`;
+ $("bar").style.width=`${index/questions.length*100}%`;
+
+ $("emoji").textContent=item.e;
+ $("question").textContent=item.q;
+
+ $("feedback").className="feedback";
+ $("feedback").textContent="";
+
+ $("nextBtn").classList.add("hidden");
+ $("answers").innerHTML="";
+
+ item.a.forEach((answer,i)=>{
+  const b=document.createElement("button");
+  b.className="answer";
+  b.textContent=answer;
+  b.onclick=()=>choose(i);
+  $("answers").appendChild(b);
+ });
+}
+
+function choose(choice){
+ if(locked)return;
+ locked=true;
+
+ const item=questions[index];
+ const correct=choice===item.c;
+
+ [...$("answers").children].forEach((b,i)=>{
+  b.disabled=true;
+  if(i===item.c)b.classList.add("correct");
+  else if(i===choice)b.classList.add("wrong");
+ });
+
+ const f=$("feedback");
+
+ f.className="feedback "+(correct?"good":"bad");
+
+ f.innerHTML=correct
+ ?`<strong>🌟 إجابة صحيحة! أحسنتِ يا بطلة!</strong><br>${item.why}`
+ :`<strong>💗 محاولة جميلة! لنتعلم معًا.</strong><br>${item.why}`;
+
+ if(correct)points++;
+
+ playTone(correct?"good":"bad");
+
+ $("score").textContent=`⭐ النقاط: ${points}`;
+ $("bar").style.width=`${(index+1)/questions.length*100}%`;
+
+ $("nextBtn").textContent=
+ index===questions.length-1?"عرض النتيجة 🏆":"السؤال التالي ←";
+
+ $("nextBtn").classList.remove("hidden");
+}
+
+function finish(){
+ $("game").classList.add("hidden");
+ $("result").classList.remove("hidden");
+
+ const percent=points/questions.length;
+
+ $("medal").textContent=
+ percent===1?"👑":percent>=.7?"🏆":"🌱";
+
+ $("resultTitle").textContent=
+ percent===1?"مذهلة! بطلة الوعي الرقمي":"أحسنتِ يا بطلة!";
+
+ $("finalScore").textContent=
+ `نتيجتك: ${points} من ${questions.length}`;
+
+ $("finalStars").textContent=
+ percent===1?"⭐⭐⭐⭐⭐":percent>=.7?"⭐⭐⭐⭐":"⭐⭐⭐";
+
+ $("resultText").textContent=
+ percent===1
+ ?"أجبتِ عن جميع التحديات بشكل صحيح! أنتِ بطلة العالم الرقمي الآمن."
+ :percent>=.7
+ ?"أداء رائع! لديكِ وعي رقمي جميل. واصلي التألق."
+ :"كل محاولة تعلم جديدة! تذكري: فكّري قبل النقر، واحمي معلوماتك، واطلبي المساعدة من شخص بالغ تثقين به.";
+}
+
+$("startBtn").onclick=()=>{
+ $("welcome").classList.add("hidden");
+ $("game").classList.remove("hidden");
+ index=0;
+ points=0;
+ showQuestion();
+};
+
+$("nextBtn").onclick=()=>{
+ if(index<questions.length-1){
+  index++;
+  showQuestion();
+ }else{
+  finish();
+ }
+};
+
+$("restartBtn").onclick=()=>{
+ $("result").classList.add("hidden");
+ $("game").classList.remove("hidden");
+ index=0;
+ points=0;
+ showQuestion();
+};
+
+$("soundToggle").onclick=()=>{
+ soundOn=!soundOn;
+ $("soundToggle").textContent=
+ soundOn?"🔊 الصوت يعمل":"🔇 الصوت مكتوم";
+ if(soundOn)playTone("good");
+};
+</script>
+</body>
+</html>
